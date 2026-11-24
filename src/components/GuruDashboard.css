@@ -1,0 +1,366 @@
+/* src/components/GuruDashboard.css — Tema Liquid Glass Emerald MTs Attaqwa 18 */
+
+.dashboard-container {
+    --mts-sf: rgba(247, 249, 244, 0.72);
+    --mts-sfx: rgba(255, 255, 255, 0.9);
+    --mts-ink: #1E2D27;
+    --mts-mut: #4A5F56;
+    --mts-g: #1D6B51;
+    --mts-gold: #C8A862;
+    --mts-line: rgba(255, 255, 255, 0.75);
+    --mts-sep: rgba(30, 45, 39, 0.14);
+    --mts-soft: rgba(255, 255, 255, 0.62);
+    --mts-hi: rgba(255, 255, 255, 0.8);
+    --mts-sh: rgba(29, 107, 81, 0.14);
+
+    position: relative;
+    z-index: 1;
+    width: min(1160px, calc(100% - 32px));
+    margin: 22px auto 88px;
+    padding: 28px 32px;
+    border-radius: 28px;
+    border: 1px solid var(--mts-line);
+    background: var(--mts-sf) !important;
+    color: var(--mts-ink) !important;
+    font-family: 'Nunito Sans', system-ui, -apple-system, sans-serif;
+    box-shadow: 0 14px 44px var(--mts-sh), inset 0 1px 0 var(--mts-hi);
+    -webkit-backdrop-filter: blur(18px) saturate(150%);
+    backdrop-filter: blur(18px) saturate(150%);
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+/* Ornamen Anyaman Geometris Octagon/Rub el Hizb Islami Statis di sudut kanan atas */
+.dashboard-container::before {
+    content: "";
+    position: absolute;
+    top: -12px;
+    right: -12px;
+    width: 320px;
+    height: 220px;
+    pointer-events: none;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 160'%3E%3Cg fill='none' stroke='%231D6B51' stroke-opacity='.11' stroke-width='1.2'%3E%3Cpath d='M110 10 L145 45 L195 45 L195 95 L230 130 L195 165 L145 165 L110 200 L75 165 L25 165 L25 115 L-10 80 L25 45 L75 45 Z'/%3E%3Cpath d='M110 35 L135 60 L170 60 L170 95 L195 120 L170 145 L135 145 L110 170 L85 145 L50 145 L50 110 L25 85 L50 60 L85 60 Z'/%3E%3Ccircle cx='110' cy='102' r='26'/%3E%3C/g%3E%3C/svg%3E") right top/contain no-repeat;
+}
+
+/* --- PENYESUAIAN MODE GELAP EMERALD --- */
+[data-theme="dark"] .dashboard-container {
+    --mts-sf: rgba(20, 46, 38, 0.78);
+    --mts-sfx: rgba(13, 33, 27, 0.9);
+    --mts-ink: #E6F2EC;
+    --mts-mut: #A9C2B8;
+    --mts-g: #86D3B2;
+    --mts-line: rgba(134, 211, 178, 0.22);
+    --mts-sep: rgba(134, 211, 178, 0.16);
+    --mts-soft: rgba(17, 40, 33, 0.85);
+    --mts-hi: rgba(134, 211, 178, 0.14);
+    --mts-sh: rgba(0, 0, 0, 0.5);
+    background: var(--mts-sf) !important;
+    color: var(--mts-ink) !important;
+    border-color: var(--mts-line) !important;
+}
+
+[data-theme="dark"] .dashboard-container::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 160'%3E%3Cg fill='none' stroke='%2386D3B2' stroke-opacity='.14' stroke-width='1.2'%3E%3Cpath d='M110 10 L145 45 L195 45 L195 95 L230 130 L195 165 L145 165 L110 200 L75 165 L25 165 L25 115 L-10 80 L25 45 L75 45 Z'/%3E%3Cpath d='M110 35 L135 60 L170 60 L170 95 L195 120 L170 145 L135 145 L110 170 L85 145 L50 145 L50 110 L25 85 L50 60 L85 60 Z'/%3E%3Ccircle cx='110' cy='102' r='26'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* --- HEADER DASHBOARD GURU --- */
+.dashboard-container .dashboard-header {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding-bottom: 18px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--mts-sep);
+}
+
+.dashboard-container .dashboard-header h2 {
+    font-family: 'Lora', Georgia, serif;
+    margin: 0;
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: var(--mts-g) !important;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--mts-gold);
+    display: inline-block;
+}
+
+.dashboard-container .user-info {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.dashboard-container .logout-btn {
+    padding: 8px 16px;
+    border-radius: 999px;
+    border: 0;
+    background: #dc2626;
+    color: #ffffff;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.dashboard-container .logout-btn:hover {
+    background: #b91c1c;
+    transform: translateY(-1px);
+}
+
+/* --- 3 MENU NAVIGASI TAB ATAS --- */
+.guru-nav-tabs {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 24px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--mts-sep);
+}
+
+.guru-nav-tabs button {
+    padding: 10px 20px;
+    border-radius: 999px;
+    border: 1px solid var(--mts-line);
+    background: var(--mts-soft);
+    color: var(--mts-ink);
+    font-family: 'Nunito Sans', system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 0.93rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.guru-nav-tabs button:hover {
+    border-color: var(--mts-g);
+    color: var(--mts-g);
+}
+
+.guru-nav-tabs button.active {
+    background: linear-gradient(135deg, #1F6B50, #2FA07C);
+    color: #ffffff;
+    border-color: transparent;
+    box-shadow: 0 6px 18px var(--mts-sh);
+}
+
+[data-theme="dark"] .guru-nav-tabs button.active {
+    background: linear-gradient(135deg, #5FC9A0, #3FA683);
+    color: #0A1814;
+}
+
+/* --- FORM BUAT JADWAL ASESMEN & TAMBAH SOAL --- */
+.add-form {
+    position: relative;
+    z-index: 1;
+    background: var(--mts-sfx) !important;
+    border: 1px solid var(--mts-line) !important;
+    border-radius: 20px;
+    padding: 24px 26px;
+    margin-bottom: 24px;
+    box-shadow: 0 8px 26px var(--mts-sh), inset 0 1px 0 var(--mts-hi);
+}
+
+.add-form h3,
+.dashboard-container h3 {
+    font-family: 'Lora', Georgia, serif;
+    margin: 0 0 18px;
+    font-size: 1.22rem;
+    font-weight: 700;
+    color: var(--mts-g) !important;
+    padding-bottom: 5px;
+    border-bottom: 2px solid var(--mts-gold);
+    display: inline-block;
+}
+
+.add-form .control-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 14px;
+    align-items: end;
+}
+
+.add-form > .control-row:first-of-type {
+    grid-template-columns: 2fr 1.3fr 0.8fr;
+}
+
+.add-form input[type="text"],
+.add-form input[type="number"],
+.add-form input[type="url"],
+.add-form select,
+.add-form textarea,
+.dashboard-container .controls input,
+.dashboard-container .controls select {
+    width: 100%;
+    padding: 11px 14px;
+    border-radius: 12px;
+    border: 1px solid var(--mts-sep);
+    background: var(--mts-soft);
+    color: var(--mts-ink);
+    font-family: 'Nunito Sans', system-ui, sans-serif;
+    font-size: 0.94rem;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.add-form textarea,
+.add-form input[type="url"] {
+    margin-bottom: 14px;
+}
+
+.add-form input:focus,
+.add-form select:focus,
+.add-form textarea:focus,
+.dashboard-container .controls input:focus,
+.dashboard-container .controls select:focus {
+    border-color: var(--mts-g);
+    box-shadow: 0 0 0 3px rgba(134, 211, 178, 0.2);
+}
+
+/* --- TOMBOL AKSI --- */
+.dashboard-container .start-button,
+.dashboard-container .upload-button,
+.dashboard-container .cancel-button,
+.dashboard-container .action-button,
+.dashboard-container .delete-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 18px;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    font-family: 'Nunito Sans', system-ui, sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.15s ease, opacity 0.2s ease;
+}
+
+.dashboard-container .start-button:hover,
+.dashboard-container .upload-button:hover,
+.dashboard-container .cancel-button:hover,
+.dashboard-container .action-button:hover,
+.dashboard-container .delete-btn:hover {
+    opacity: 0.92;
+    transform: translateY(-1px);
+}
+
+.dashboard-container .start-button {
+    background: linear-gradient(135deg, #1F6B50, #2FA07C);
+    color: #ffffff;
+    box-shadow: 0 6px 16px var(--mts-sh);
+}
+
+[data-theme="dark"] .dashboard-container .start-button {
+    background: linear-gradient(135deg, #5FC9A0, #3FA683);
+    color: #0A1814;
+}
+
+.dashboard-container .upload-button {
+    background: var(--mts-sfx);
+    border-color: var(--mts-g);
+    color: var(--mts-g);
+}
+
+.dashboard-container .cancel-button {
+    background: var(--mts-soft);
+    border-color: var(--mts-line);
+    color: var(--mts-ink);
+}
+
+.dashboard-container .action-button {
+    padding: 6px 13px;
+    font-size: 0.82rem;
+    margin-right: 6px;
+}
+
+.dashboard-container .edit-btn {
+    background: #C8A862;
+    color: #1E2D27;
+}
+
+.dashboard-container .detail-btn {
+    background: #1F6B50;
+    color: #ffffff;
+}
+
+[data-theme="dark"] .dashboard-container .detail-btn {
+    background: #5FC9A0;
+    color: #0A1814;
+}
+
+.dashboard-container .delete-btn {
+    background: #dc2626;
+    color: #ffffff;
+}
+
+/* --- TABEL DATA --- */
+.dashboard-container .table-responsive {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    overflow-x: auto;
+    border-radius: 16px;
+    border: 1px solid var(--mts-line);
+    background: var(--mts-sfx);
+}
+
+.bank-soal-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.92rem;
+}
+
+.bank-soal-table thead th {
+    background: #1F6B50;
+    color: #ffffff;
+    padding: 12px 14px;
+    font-weight: 700;
+}
+
+[data-theme="dark"] .bank-soal-table thead th {
+    background: #184E3B;
+    color: #E6F2EC;
+}
+
+.bank-soal-table td {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--mts-sep);
+    vertical-align: middle;
+}
+
+.bank-soal-table tbody tr:hover {
+    background: rgba(134, 211, 178, 0.08);
+}
+
+.no-data-msg {
+    text-align: center;
+    padding: 24px;
+    color: var(--mts-mut);
+}
+
+/* --- RESPONSIVE TABLET & HP --- */
+@media (max-width: 860px) {
+    .dashboard-container {
+        width: calc(100% - 24px);
+        margin: 14px auto 76px;
+        padding: 18px 16px;
+    }
+
+    .add-form .control-row,
+    .add-form > .control-row:first-of-type {
+        grid-template-columns: 1fr;
+    }
+
+    .guru-nav-tabs button {
+        flex: 1 1 auto;
+        text-align: center;
+    }
+}

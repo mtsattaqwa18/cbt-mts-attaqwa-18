@@ -1,0 +1,442 @@
+/* src/components/Login.css — Tema Liquid Glass MTs Attaqwa 18 */
+
+.mts-login-page {
+    --mts-sf: rgba(247, 249, 244, 0.62);
+    --mts-sfx: rgba(255, 255, 255, 0.85);
+    --mts-bg: linear-gradient(160deg, #EFF1EB 0%, #E7EEE9 50%, #E6ECEF 100%);
+    --mts-ink: #1E2D27;
+    --mts-mut: #4A5F56;
+    --mts-g: #1D6B51;
+    --mts-gold: #C8A862;
+    --mts-line: rgba(255, 255, 255, 0.68);
+    --mts-sep: rgba(30, 45, 39, 0.14);
+    --mts-soft: rgba(255, 255, 255, 0.55);
+    --mts-hi: rgba(255, 255, 255, 0.72);
+    --mts-sh: rgba(29, 107, 81, 0.15);
+    --mts-c1: #4A9E83;
+    --mts-c2: #7CC2B2;
+    --mts-c3: #9DBFDD;
+
+    position: relative;
+    min-height: 100vh;
+    width: 100%;
+    overflow-x: hidden;
+    background: var(--mts-bg);
+    color: var(--mts-ink);
+    font-family: 'Nunito Sans', system-ui, -apple-system, sans-serif;
+    padding: 16px 16px 84px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+/* --- PENYESUAIAN MODE GELAP --- */
+[data-theme="dark"] .mts-login-page {
+    --mts-sf: rgba(22, 44, 37, 0.56);
+    --mts-sfx: rgba(14, 32, 26, 0.82);
+    --mts-bg: linear-gradient(160deg, #0A1814 0%, #0F2620 50%, #0E2230 100%);
+    --mts-ink: #E6F2EC;
+    --mts-mut: #A9C2B8;
+    --mts-g: #86D3B2;
+    --mts-line: rgba(255, 255, 255, 0.15);
+    --mts-sep: rgba(255, 255, 255, 0.14);
+    --mts-soft: rgba(255, 255, 255, 0.08);
+    --mts-hi: rgba(255, 255, 255, 0.12);
+    --mts-sh: rgba(0, 0, 0, 0.45);
+    --mts-c1: #1D7A5B;
+    --mts-c2: #27998A;
+    --mts-c3: #2D6FA3;
+}
+
+/* --- GELEMBUNG WARNA LATAR --- */
+.mts-blobs {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.mts-blobs i {
+    position: absolute;
+    opacity: 0.62;
+    border-radius: 58% 42% 55% 45% / 48% 58% 42% 52%;
+}
+
+.mts-blobs .b1 {
+    width: 420px;
+    height: 450px;
+    left: -130px;
+    top: 90px;
+    background: linear-gradient(145deg, var(--mts-c1), var(--mts-c2));
+}
+
+.mts-blobs .b2 {
+    width: 340px;
+    height: 360px;
+    right: -90px;
+    top: 40px;
+    background: linear-gradient(200deg, var(--mts-c3), var(--mts-c1));
+}
+
+.mts-blobs .b3 {
+    width: 240px;
+    height: 260px;
+    right: 14%;
+    bottom: 60px;
+    background: linear-gradient(160deg, var(--mts-c2), var(--mts-c3));
+}
+
+.mts-blobs .b4 {
+    width: 110px;
+    height: 110px;
+    left: 10%;
+    bottom: 90px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #ffffff, var(--mts-c2));
+}
+
+/* --- TOPBAR KACA BURAM --- */
+.mts-topbar {
+    position: relative;
+    z-index: 2;
+    width: min(1100px, 96%);
+    padding: 12px 22px;
+    border-radius: 24px;
+    border: 1px solid var(--mts-line);
+    background: var(--mts-sf);
+    box-shadow: 0 10px 36px var(--mts-sh), inset 0 1px 0 var(--mts-hi);
+    -webkit-backdrop-filter: blur(18px) saturate(150%);
+    backdrop-filter: blur(18px) saturate(150%);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.mts-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.mts-logo-badge {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #1F6B50, #2FA07C);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.15rem;
+    box-shadow: 0 4px 12px rgba(29, 107, 81, 0.3);
+    border: 2px solid var(--mts-gold);
+}
+
+.mts-brand-title {
+    display: block;
+    font-family: 'Lora', Georgia, serif;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--mts-g);
+    line-height: 1.2;
+}
+
+.mts-brand-sub {
+    display: block;
+    font-size: 0.82rem;
+    color: var(--mts-mut);
+}
+
+.mts-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: var(--mts-soft);
+    border: 1px solid var(--mts-line);
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--mts-g);
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #22c55e;
+    box-shadow: 0 0 8px #22c55e;
+}
+
+/* --- HERO CARD DENGAN ORNAMEN GEOMETRIS --- */
+.mts-hero-card {
+    position: relative;
+    z-index: 2;
+    width: min(1100px, 96%);
+    margin: 24px auto;
+    border-radius: 30px;
+    border: 1px solid var(--mts-line);
+    background: var(--mts-sf);
+    box-shadow: 0 14px 44px var(--mts-sh), inset 0 1px 0 var(--mts-hi);
+    -webkit-backdrop-filter: blur(18px) saturate(150%);
+    backdrop-filter: blur(18px) saturate(150%);
+    overflow: hidden;
+}
+
+.mts-hero-card::before {
+    content: "";
+    position: absolute;
+    inset: -80px;
+    animation: mtsDrift 40s linear infinite;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cg fill='none' stroke='%231D6B51' stroke-opacity='.12'%3E%3Crect x='22' y='22' width='36' height='36'/%3E%3Crect x='22' y='22' width='36' height='36' transform='rotate(45 40 40)'/%3E%3C/g%3E%3C/svg%3E");
+    pointer-events: none;
+}
+
+[data-theme="dark"] .mts-hero-card::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cg fill='none' stroke='%2386D3B2' stroke-opacity='.11'%3E%3Crect x='22' y='22' width='36' height='36'/%3E%3Crect x='22' y='22' width='36' height='36' transform='rotate(45 40 40)'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+.mts-hero-card::after {
+    content: "";
+    position: absolute;
+    width: 520px;
+    height: 520px;
+    right: -140px;
+    top: 50%;
+    margin-top: -260px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cg fill='none' stroke='%231D6B51' stroke-opacity='.15' stroke-width='1.2'%3E%3Crect x='40' y='40' width='120' height='120'/%3E%3Crect x='40' y='40' width='120' height='120' transform='rotate(45 100 100)'/%3E%3Ccircle cx='100' cy='100' r='62'/%3E%3Ccircle cx='100' cy='100' r='30'/%3E%3Crect x='70' y='70' width='60' height='60' transform='rotate(22.5 100 100)'/%3E%3C/g%3E%3C/svg%3E") center/contain no-repeat;
+    animation: mtsSpin 120s linear infinite;
+    pointer-events: none;
+}
+
+[data-theme="dark"] .mts-hero-card::after {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cg fill='none' stroke='%2386D3B2' stroke-opacity='.15' stroke-width='1.2'%3E%3Crect x='40' y='40' width='120' height='120'/%3E%3Crect x='40' y='40' width='120' height='120' transform='rotate(45 100 100)'/%3E%3Ccircle cx='100' cy='100' r='62'/%3E%3Ccircle cx='100' cy='100' r='30'/%3E%3Crect x='70' y='70' width='60' height='60' transform='rotate(22.5 100 100)'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+@keyframes mtsDrift {
+    to { transform: translate(80px, 80px); }
+}
+
+@keyframes mtsSpin {
+    to { transform: rotate(360deg); }
+}
+
+.mts-hero-grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 2.4rem;
+    align-items: center;
+    padding: 2.8rem 2.6rem;
+}
+
+/* --- KOLOM KIRI --- */
+.mts-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 5px 14px;
+    border-radius: 999px;
+    background: var(--mts-soft);
+    border: 1px solid var(--mts-line);
+    color: var(--mts-g);
+    font-size: 0.82rem;
+    font-weight: 700;
+    margin-bottom: 14px;
+}
+
+.mts-hero-info h1 {
+    font-family: 'Lora', Georgia, serif;
+    font-size: clamp(1.9rem, 3.4vw, 2.85rem);
+    line-height: 1.22;
+    color: var(--mts-g);
+    margin: 0 0 10px;
+}
+
+.mts-tagline {
+    font-size: 1.12rem;
+    color: var(--mts-mut);
+    margin: 0 0 22px;
+}
+
+.mts-rules-box {
+    background: var(--mts-soft);
+    border: 1px solid var(--mts-line);
+    border-radius: 18px;
+    padding: 18px 20px;
+}
+
+.mts-rules-box h3 {
+    font-family: 'Lora', Georgia, serif;
+    font-size: 1.08rem;
+    color: var(--mts-g);
+    margin: 0 0 10px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--mts-gold);
+    display: inline-block;
+}
+
+.mts-rules-box ul {
+    margin: 0;
+    padding-left: 1.25rem;
+    font-size: 0.93rem;
+    line-height: 1.6;
+    color: var(--mts-ink);
+}
+
+.mts-rules-box li + li {
+    margin-top: 6px;
+}
+
+/* --- KOLOM KANAN: FORM LOGIN --- */
+.mts-login-box {
+    background: var(--mts-sfx);
+    border: 1px solid var(--mts-line);
+    border-radius: 22px;
+    padding: 28px 26px;
+    box-shadow: 0 12px 32px var(--mts-sh), inset 0 1px 0 var(--mts-hi);
+}
+
+.mts-login-header h2 {
+    font-family: 'Lora', Georgia, serif;
+    font-size: 1.5rem;
+    color: var(--mts-g);
+    margin: 0 0 6px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--mts-gold);
+    display: inline-block;
+}
+
+.mts-login-header p {
+    font-size: 0.9rem;
+    color: var(--mts-mut);
+    margin: 4px 0 20px;
+}
+
+.mts-login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.mts-field label {
+    display: block;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--mts-ink);
+    margin-bottom: 6px;
+}
+
+.mts-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 14px;
+    border-radius: 12px;
+    border: 1px solid var(--mts-sep);
+    background: var(--mts-soft);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.mts-input-wrap:focus-within {
+    border-color: var(--mts-g);
+    box-shadow: 0 0 0 3px rgba(29, 107, 81, 0.18);
+}
+
+.mts-input-wrap i {
+    color: var(--mts-g);
+    font-size: 0.95rem;
+}
+
+.mts-input-wrap input {
+    border: 0;
+    background: transparent;
+    color: var(--mts-ink);
+    font-family: 'Nunito Sans', system-ui, sans-serif;
+    font-size: 0.98rem;
+    padding: 12px 0;
+    width: 100%;
+    outline: none;
+}
+
+.mts-eye-btn {
+    background: none;
+    border: 0;
+    color: var(--mts-mut);
+    cursor: pointer;
+    padding: 4px;
+}
+
+.mts-submit-btn {
+    margin-top: 6px;
+    width: 100%;
+    padding: 13px 20px;
+    border: 0;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #1F6B50, #2FA07C);
+    color: #ffffff;
+    font-family: 'Nunito Sans', system-ui, sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 8px 20px var(--mts-sh);
+    transition: transform 0.15s ease, background 0.2s ease;
+}
+
+.mts-submit-btn:hover:not(:disabled) {
+    background: linear-gradient(135deg, #25805F, #35B08B);
+    transform: translateY(-1px);
+}
+
+.mts-submit-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+[data-theme="dark"] .mts-submit-btn {
+    background: linear-gradient(135deg, #5FC9A0, #3FA683);
+    color: #0A1814;
+}
+
+/* --- FOOTER --- */
+.mts-footer {
+    position: relative;
+    z-index: 2;
+    width: min(1100px, 96%);
+    padding: 14px 22px;
+    border-radius: 20px;
+    border: 1px solid var(--mts-line);
+    background: var(--mts-sf);
+    color: var(--mts-mut);
+    text-align: center;
+    font-size: 0.9rem;
+    box-shadow: 0 8px 28px var(--mts-sh), inset 0 1px 0 var(--mts-hi);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+}
+
+.mts-footer strong {
+    color: var(--mts-g);
+}
+
+/* --- RESPONSIVE HP / TABLET --- */
+@media (max-width: 860px) {
+    .mts-hero-grid {
+        grid-template-columns: 1fr;
+        padding: 1.8rem 1.4rem;
+        gap: 1.6rem;
+    }
+
+    .mts-hero-card::after {
+        width: 340px;
+        height: 340px;
+        margin-top: -170px;
+        right: -130px;
+    }
+}
