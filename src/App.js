@@ -15,6 +15,15 @@ const LOCAL_STORAGE_KEY_USER = 'ujianOnline_currentUser';
 const LOCAL_STORAGE_KEY_THEME = 'ujianOnline_theme';
 const TOAST_TIMEOUT = 5000;
 
+export const generateExamToken = (length = 6) => {
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    let token = '';
+    for (let i = 0; i < length; i++) {
+        token += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return token.toUpperCase();
+};
+
 const mockUsers = [
     { id: 0, name: 'Super Admin', username: 'admin', role: 'admin', password: 'admin' },
     { id: 1, name: 'RIDHAN FAUZI,S.Th.i', username: 'guru', role: 'guru', password: 'guru' },
@@ -33,6 +42,8 @@ const initialExamsList = [
         kkm: 75,
         shuffleQuestions: true,
         shuffleOptions: true,
+        requireToken: false,
+        examToken: null,
         isActive: true,
     },
     {
@@ -45,6 +56,8 @@ const initialExamsList = [
         kkm: 75,
         shuffleQuestions: false,
         shuffleOptions: false,
+        requireToken: false,
+        examToken: null,
         isActive: true,
     },
 ];
@@ -133,13 +146,21 @@ const normalizeBankSoal = (list) => {
 
 const normalizeExamsList = (list) => {
     if (!Array.isArray(list)) return [];
-    return list.filter(Boolean).map(e => ({
-        ...e,
-        subject: migrateSubjectName(e.subject),
-        kkm: Math.max(70, Number(e.kkm) || 75),
-        shuffleQuestions: Boolean(e.shuffleQuestions),
-        shuffleOptions: Boolean(e.shuffleOptions),
-    }));
+    return list.filter(Boolean).map(e => {
+        const requireToken = Boolean(e.requireToken);
+        const normalizedToken = requireToken
+            ? String(e.examToken || generateExamToken()).trim().toUpperCase()
+            : null;
+        return {
+            ...e,
+            subject: migrateSubjectName(e.subject),
+            kkm: Math.max(70, Number(e.kkm) || 75),
+            shuffleQuestions: Boolean(e.shuffleQuestions),
+            shuffleOptions: Boolean(e.shuffleOptions),
+            requireToken,
+            examToken: normalizedToken,
+        };
+    });
 };
 
 function App() {
@@ -365,6 +386,11 @@ function App() {
 
     // --- HANDLER MANAJEMEN UJIAN (GURU) ---
     const handleAddExam = (examDetails) => {
+        const requireToken = Boolean(examDetails.requireToken);
+        const generatedToken = requireToken
+            ? String(examDetails.examToken || generateExamToken()).trim().toUpperCase()
+            : null;
+
         const newExam = {
             id: Date.now(),
             name: examDetails.name,
@@ -375,13 +401,39 @@ function App() {
             kkm: Math.max(70, Number(examDetails.kkm) || 75),
             shuffleQuestions: Boolean(examDetails.shuffleQuestions),
             shuffleOptions: Boolean(examDetails.shuffleOptions),
+            requireToken,
+            examToken: generatedToken,
             isActive: true,
         };
         const updatedList = [...examsList, newExam];
         setExamsList(updatedList);
         syncToFirebase('examsList', updatedList);
-        showToast(`Ujian "${newExam.name}" berhasil ditambahkan (KKM: ${newExam.kkm}).`, 'success');
+        showToast(
+            requireToken
+                ? `Ujian "${newExam.name}" ditambahkan dengan Token: ${generatedToken}.`
+                : `Ujian "${newExam.name}" berhasil ditambahkan (KKM: ${newExam.kkm}).`,
+            'success'
+        );
         return newExam;
+    };
+
+    const handleResetExamToken = (examId) => {
+        const targetExam = examsList.find(e => e.id === examId);
+        if (!targetExam) return;
+
+        const newToken = generateExamToken();
+        const updatedList = examsList.map(e =>
+            e.id === examId
+                ? {
+                      ...e,
+                      requireToken: true,
+                      examToken: newToken,
+                  }
+                : e
+        );
+        setExamsList(updatedList);
+        syncToFirebase('examsList', updatedList);
+        showToast(`Token ujian "${targetExam.name}" direset menjadi: ${newToken}`, 'info');
     };
 
     const handleToggleExamStatus = (examId) => {
@@ -634,6 +686,7 @@ function App() {
                         onAddExam={handleAddExam}
                         onToggleExamStatus={handleToggleExamStatus}
                         onDeleteExam={handleDeleteExam}
+                        onResetExamToken={handleResetExamToken}
                         allCompletedExams={completedExams}
                         showToast={showToast}
                         onViewDetail={handleViewExamDetail}
@@ -660,6 +713,7 @@ function App() {
                     onStartExam={handleStartExam}
                     availableExams={examsList}
                     completedExams={studentCompletedExams}
+                    showToast={showToast}
                 />
             );
         }
