@@ -6,6 +6,15 @@ import './GuruDashboard.css';
 
 const LABELS = ['A', 'B', 'C', 'D'];
 
+const createTokenCode = (length = 6) => {
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    let token = '';
+    for (let i = 0; i < length; i++) {
+        token += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return token.toUpperCase();
+};
+
 const normalizeOptions = (options) => {
     if (Array.isArray(options)) return options;
     if (options && typeof options === 'object') {
@@ -24,6 +33,7 @@ function GuruDashboard({
     onAddExam,
     onToggleExamStatus,
     onDeleteExam,
+    onResetExamToken,
     showToast,
     onViewDetail,
     bankSoal = [],
@@ -70,6 +80,8 @@ function GuruDashboard({
         kkm: 75,
         shuffleQuestions: true,
         shuffleOptions: true,
+        requireToken: false,
+        examToken: '',
     });
 
     // --- STATE BANK SOAL ---
@@ -164,6 +176,28 @@ function GuruDashboard({
         resultSearchQuery,
     ]);
 
+    // --- HANDLER CEKLIS TOKEN PADA FORM BUAT UJIAN ---
+    const handleToggleRequireToken = (checked) => {
+        setExamForm(prev => ({
+            ...prev,
+            requireToken: checked,
+            examToken: checked ? (prev.examToken || createTokenCode()).toUpperCase() : '',
+        }));
+    };
+
+    const handleCopyToken = (tokenValue) => {
+        if (!tokenValue) return;
+        const upperToken = String(tokenValue).toUpperCase();
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard
+                .writeText(upperToken)
+                .then(() => showToast(`Token ${upperToken} disalin ke clipboard.`, 'info'))
+                .catch(() => showToast(`Token aktif: ${upperToken}`, 'info'));
+        } else {
+            showToast(`Token aktif: ${upperToken}`, 'info');
+        }
+    };
+
     // --- HANDLER BUAT UJIAN BARU ---
     const handleCreateExam = (e) => {
         e.preventDefault();
@@ -183,6 +217,10 @@ function GuruDashboard({
             );
         }
 
+        const finalToken = examForm.requireToken
+            ? (examForm.examToken || createTokenCode()).trim().toUpperCase()
+            : null;
+
         onAddExam({
             name: examForm.name.trim(),
             subject: examForm.subject,
@@ -192,11 +230,14 @@ function GuruDashboard({
             kkm: Math.max(70, Number(examForm.kkm) || 75),
             shuffleQuestions: examForm.shuffleQuestions,
             shuffleOptions: examForm.shuffleOptions,
+            requireToken: examForm.requireToken,
+            examToken: finalToken,
         });
 
         setExamForm(prev => ({
             ...prev,
             name: '',
+            examToken: prev.requireToken ? createTokenCode() : '',
         }));
     };
 
@@ -544,6 +585,7 @@ function GuruDashboard({
                                     flexWrap: 'wrap',
                                     gap: '20px',
                                     margin: '10px 0 14px',
+                                    alignItems: 'center',
                                 }}
                             >
                                 <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
@@ -567,6 +609,45 @@ function GuruDashboard({
                                     />
                                     <span>Acak Pilihan Jawaban (A/B/C/D)</span>
                                 </label>
+
+                                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+                                    <input
+                                        type="checkbox"
+                                        checked={examForm.requireToken}
+                                        onChange={(e) => handleToggleRequireToken(e.target.checked)}
+                                    />
+                                    <span>Gunakan Token Ujian</span>
+                                </label>
+
+                                {examForm.requireToken && (
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                        <span
+                                            style={{
+                                                padding: '4px 10px',
+                                                borderRadius: '6px',
+                                                fontWeight: 700,
+                                                letterSpacing: '0.08em',
+                                                background: 'rgba(37, 99, 235, 0.12)',
+                                                color: '#2563eb',
+                                                fontSize: '0.9rem',
+                                            }}
+                                        >
+                                            {examForm.examToken}
+                                        </span>
+                                        <button
+                                            type="button"
+                                            className="action-button edit-btn"
+                                            onClick={() =>
+                                                setExamForm(prev => ({
+                                                    ...prev,
+                                                    examToken: createTokenCode(),
+                                                }))
+                                            }
+                                        >
+                                            Generate Ulang
+                                        </button>
+                                    </div>
+                                )}
                             </div>
 
                             <button type="submit" className="start-button">
@@ -584,6 +665,7 @@ function GuruDashboard({
                                         <th>Soal / Durasi</th>
                                         <th>KKM</th>
                                         <th>Pengacakan</th>
+                                        <th>Token</th>
                                         <th>Status</th>
                                         <th>Aksi</th>
                                     </tr>
@@ -595,6 +677,7 @@ function GuruDashboard({
                                                 q.subject === exam.subject &&
                                                 Number(q.grade) === Number(exam.grade)
                                         ).length;
+                                        const usesToken = Boolean(exam.requireToken && exam.examToken);
 
                                         return (
                                             <tr key={exam.id}>
@@ -616,6 +699,37 @@ function GuruDashboard({
                                                     {exam.shuffleOptions ? 'Acak Opsi' : 'Opsi Tetap'}
                                                 </td>
                                                 <td>
+                                                    {usesToken ? (
+                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+                                                            <span
+                                                                style={{
+                                                                    padding: '4px 10px',
+                                                                    borderRadius: '6px',
+                                                                    fontSize: '0.82rem',
+                                                                    fontWeight: 700,
+                                                                    letterSpacing: '0.06em',
+                                                                    background: 'rgba(37, 99, 235, 0.14)',
+                                                                    color: '#2563eb',
+                                                                }}
+                                                            >
+                                                                {exam.examToken}
+                                                            </span>
+                                                            <button
+                                                                type="button"
+                                                                className="action-button edit-btn"
+                                                                onClick={() => handleCopyToken(exam.examToken)}
+                                                                title="Salin Token"
+                                                            >
+                                                                Salin
+                                                            </button>
+                                                        </div>
+                                                    ) : (
+                                                        <span style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>
+                                                            Tanpa Token
+                                                        </span>
+                                                    )}
+                                                </td>
+                                                <td>
                                                     <span
                                                         style={{
                                                             padding: '4px 10px',
@@ -632,6 +746,23 @@ function GuruDashboard({
                                                     </span>
                                                 </td>
                                                 <td>
+                                                    {onResetExamToken && (
+                                                        <button
+                                                            type="button"
+                                                            className="action-button edit-btn"
+                                                            onClick={() => {
+                                                                if (
+                                                                    window.confirm(
+                                                                        `Reset token untuk asesmen "${exam.name}"? Token baru akan langsung berlaku untuk siswa yang belum memulai.`
+                                                                    )
+                                                                ) {
+                                                                    onResetExamToken(exam.id);
+                                                                }
+                                                            }}
+                                                        >
+                                                            Reset Token
+                                                        </button>
+                                                    )}
                                                     <button
                                                         type="button"
                                                         className="action-button edit-btn"

@@ -10,8 +10,12 @@ function SiswaDashboard({
     examsList = [],
     completedExams = [],
     onViewDetail,
+    showToast,
 }) {
     const [activeTab, setActiveTab] = useState('info');
+    const [tokenModalExam, setTokenModalExam] = useState(null);
+    const [tokenInput, setTokenInput] = useState('');
+    const [tokenError, setTokenError] = useState('');
 
     // Mengambil daftar ujian dari prop availableExams (App.js) atau cadangan examsList
     const sourceExams = Array.isArray(availableExams) && availableExams.length > 0
@@ -30,6 +34,49 @@ function SiswaDashboard({
         completedExams.some(
             c => c && c.examId === examId && c.studentName === user.name
         );
+
+    const handleAttemptStartExam = (exam) => {
+        if (exam && exam.requireToken && exam.examToken) {
+            setTokenModalExam(exam);
+            setTokenInput('');
+            setTokenError('');
+            return;
+        }
+        onStartExam(exam);
+    };
+
+    const handleCloseTokenModal = () => {
+        setTokenModalExam(null);
+        setTokenInput('');
+        setTokenError('');
+    };
+
+    const handleVerifyTokenSubmit = (e) => {
+        e.preventDefault();
+        if (!tokenModalExam) return;
+
+        const latestExam =
+            activeStudentExams.find(item => item.id === tokenModalExam.id) || tokenModalExam;
+        const expectedToken = String(latestExam.examToken || '').trim().toUpperCase();
+        const enteredToken = String(tokenInput || '').trim().toUpperCase();
+
+        if (!enteredToken) {
+            setTokenError('Silakan masukkan token ujian terlebih dahulu.');
+            return;
+        }
+
+        if (enteredToken !== expectedToken) {
+            setTokenError('Token tidak sesuai. Periksa kembali token dari guru.');
+            if (showToast) {
+                showToast('Token ujian salah! Silakan cek kembali token dari guru.', 'error');
+            }
+            return;
+        }
+
+        const examToLaunch = latestExam;
+        handleCloseTokenModal();
+        onStartExam(examToLaunch);
+    };
 
     return (
         <div className="siswa-page-wrapper">
@@ -173,6 +220,11 @@ function SiswaDashboard({
                                                     <span className="exam-meta-pill">
                                                         KKM: {exam.kkm || 75}
                                                     </span>
+                                                    {exam.requireToken && (
+                                                        <span className="exam-meta-pill">
+                                                            Perlu Token
+                                                        </span>
+                                                    )}
                                                 </div>
                                             </div>
 
@@ -180,7 +232,7 @@ function SiswaDashboard({
                                                 type="button"
                                                 className="start-button"
                                                 disabled={completed}
-                                                onClick={() => onStartExam(exam)}
+                                                onClick={() => handleAttemptStartExam(exam)}
                                             >
                                                 {completed ? 'Sudah Dikerjakan' : 'Mulai Asesmen'}
                                             </button>
@@ -252,6 +304,72 @@ function SiswaDashboard({
                     </div>
                 )}
             </div>
+
+            {/* MODAL INPUT TOKEN SEBELUM MULAI UJIAN */}
+            {tokenModalExam && (
+                <div className="violation-overlay">
+                    <div className="violation-modal" style={{ textAlign: 'left', maxWidth: '420px' }}>
+                        <h3 style={{ marginTop: 0, marginBottom: '6px' }}>Verifikasi Token Ujian</h3>
+                        <p style={{ margin: '0 0 14px', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
+                            <strong>{tokenModalExam.name}</strong> ({tokenModalExam.subject})
+                        </p>
+
+                        <form onSubmit={handleVerifyTokenSubmit}>
+                            <label
+                                htmlFor="exam-token-input"
+                                style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '6px' }}
+                            >
+                                Masukkan Token dari Guru (Otomatis Huruf Kapital)
+                            </label>
+                            <input
+                                id="exam-token-input"
+                                type="text"
+                                autoFocus
+                                value={tokenInput}
+                                onChange={(e) => {
+                                    setTokenInput(e.target.value.toUpperCase());
+                                    if (tokenError) setTokenError('');
+                                }}
+                                placeholder="CONTOH: A7K9M2"
+                                style={{
+                                    width: '100%',
+                                    padding: '10px 12px',
+                                    borderRadius: '8px',
+                                    border: '1px solid rgba(148, 163, 184, 0.5)',
+                                    textTransform: 'uppercase',
+                                    letterSpacing: '0.12em',
+                                    fontWeight: 700,
+                                    fontSize: '1rem',
+                                    boxSizing: 'border-box',
+                                }}
+                            />
+
+                            {tokenError && (
+                                <p style={{ color: '#ef4444', fontSize: '0.84rem', margin: '8px 0 0', fontWeight: 600 }}>
+                                    {tokenError}
+                                </p>
+                            )}
+
+                            <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', marginTop: '18px' }}>
+                                <button
+                                    type="button"
+                                    className="cancel-button"
+                                    onClick={handleCloseTokenModal}
+                                >
+                                    Batal
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="start-button"
+                                    style={{ width: 'auto', padding: '10px 18px' }}
+                                >
+                                    Verifikasi &amp; Mulai
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
